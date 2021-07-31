@@ -1,0 +1,3 @@
+class Trapezoid extends Shape {
+  
+}
