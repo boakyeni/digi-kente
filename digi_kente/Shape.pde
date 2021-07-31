@@ -1,24 +1,43 @@
 class Shape {
-  PShape shape;
   color shapeColor;
+  color strokeColor;
   PVector position;
+  PVector velocity;
+  PVector center;
   Shape(){
-    shape = new PShape();
     position = new PVector();
+    velocity = new PVector();
+    center = new PVector();
   }
   
   void setColor(color c){
     shapeColor = c;
-    shape.setFill(c);
+  }
+  void setStrokeColor(color c){
+    strokeColor = c;
   }
   
   void setPosition(float x, float y){
-    shape.translate(x,y);
+    position.x = x;
+    position.y = y;
+  }
+  float getX (){
+   return position.x; 
+  }
+  float getY (){
+   return position.y; 
+  }
+  
+  void offSet(float x, float y) {
     position.x += x;
     position.y += y;
   }
-  void rotateShape(float rad){
-    shape.rotate(rad);
+  void rotateShape(float deg){
+    pushMatrix();
+    translate(this.center.x, this.center.y);
+    rotate(radians(deg));
+    popMatrix();
+    
   }
   
   

@@ -6,16 +6,18 @@ class Rectangle extends Shape {
     setPosition(x,y);
     rectWidth = w;
     rectHeight = h;
-    shape = createShape(RECT, position.x, position.y, rectWidth, rectHeight);
   }
   
   void setWidth(float w){
     rectWidth = w;
-    shape.width = w;
+    
   }
   void setHeight(float h){
-    shape.height = h;
-    rectHeight = h;
+    if(h > 0){
+      rectHeight = h;
+    }else {
+      rectHeight = 0;
+    }
   }
   float getWidth(){
     return this.rectWidth;
@@ -26,7 +28,14 @@ class Rectangle extends Shape {
   
   void display(){
     fill(shapeColor);
-    shape(shape);
+    stroke(strokeColor);
+    if(rectHeight != 0){
+      stroke(strokeColor);
+      rect(position.x, position.y, rectWidth, rectHeight);
+    }else{
+      stroke(0, 0);
+      rect(position.x, position.y, rectWidth, rectHeight);
+    }
   }
     
   
