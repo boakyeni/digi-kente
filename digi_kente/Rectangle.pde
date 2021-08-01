@@ -8,10 +8,7 @@ class Rectangle extends Shape {
     rectHeight = h;
   }
   
-  void setWidth(float w){
-    rectWidth = w;
-    
-  }
+  void setWidth(float w){rectWidth = w;}
   void setHeight(float h){
     if(h > 0){
       rectHeight = h;
@@ -19,12 +16,8 @@ class Rectangle extends Shape {
       rectHeight = 0;
     }
   }
-  float getWidth(){
-    return this.rectWidth;
-  }
-  float getHeight(){
-    return this.rectHeight;
-  }
+  float getWidth(){return this.rectWidth;}
+  float getHeight(){return this.rectHeight;}
   
   void display(){
     if(this.rectHeight != 0){

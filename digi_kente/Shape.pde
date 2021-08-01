@@ -13,8 +13,14 @@ class Shape {
   void setColor(color c){
     shapeColor = c;
   }
+  color getColor(){
+    return shapeColor;
+  }
   void setStrokeColor(color c){
     strokeColor = c;
+  }
+  color getStrokeColor(){
+    return strokeColor;
   }
   
   void setPosition(float x, float y){

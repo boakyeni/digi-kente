@@ -5,6 +5,7 @@ class Patch {
    * where the elements are placed in the patch.
    */
   float xCord, yCord, patchWidth, patchHeight;
+  float lineYCord = 0;
   ArrayList<Element> elements = new ArrayList<Element>();
   Patch(float x, float y) {
     xCord = x;
@@ -13,7 +14,7 @@ class Patch {
     patchHeight = height/4;
     
   }
-  float lineYCord = 0;
+  
   //draw faint slighly spaced lines over patch 
   void linesOverlay(color c){
     pushMatrix();
@@ -26,16 +27,14 @@ class Patch {
     }
     popMatrix();
   }
+  
   PVector position(){
     PVector p = new PVector(xCord,yCord);
     return p;
   }
-  float getPatchWidth() {
-    return patchWidth;
-  }
-  float getPatchHeight() {
-    return patchHeight;
-  }
+  
+  float getPatchWidth() {return patchWidth;}
+  float getPatchHeight() {return patchHeight;}
   
   void display() {
     noFill();
@@ -49,17 +48,16 @@ class Patch {
   void update(){
     
   }
-  /*
-  void update() {
-   for(Element e: elements) e.update();
-  }*/
 }
+
+
 /*
  * This patch has rolling pixel arrow bows
  */
 class ArrowPatch extends Patch {
   ArrayList<PixelArrow> bows;
   PVector loc;
+  float clearance; 
   ArrowPatch(float x,float y){
    super(x,y); 
    bows = new ArrayList<PixelArrow>();
@@ -74,53 +72,72 @@ class ArrowPatch extends Patch {
    bows.get(0).chooseColor(color(0,64,0));
    bows.get(3).chooseColor(color(0,64,0));
   }
-  float clearance; 
-  void display(){
-    super.display();
-     pushMatrix();
-     translate(xCord,yCord);
+  /*
+   * Sets the colors of the elements of the patch to 
+   * random choice from the passed in array
+   */
+  
+  void setColors(ArrayList<Integer> c){
+    for(PixelArrow pa: bows){
+      pa.setColor(c); 
+    }
+  }
+  
+  
     /*
      * If i want to fill in the bottom arrow i'd need a 
      * clearance variable of some sort so it knows when to
      * turn back into an arrow from a pixel triangle
      * printing the arrows in patch
      */
-    for(PixelArrow e: bows){
-       PixelArrow current = e;
-       for(Rectangle r: current.rectArray){
-         //only portion of arrow in patch is visible
+  void display(){
+    super.display();
+    pushMatrix();
+    translate(xCord,yCord);
+    //changing by individual rectangles instead of entire element
+    for(int i = 0; i < bows.size(); i++){
+       PixelArrow current = bows.get(i);
+       for(int j = 0; j < current.rectArray.size(); j++){
+         Rectangle r = current.rectArray.get(j);
+         //only portion of arrow in patch is visible at bottom
           if((r.getY()+r.getHeight())>=(this.patchHeight-1)){
              r.setHeight(this.patchHeight - r.getY());}
           if (r.getHeight() > current.getRectHeight()) {
              r.setHeight(current.getRectHeight());}
-          //once at the top make go transparent, print new rect
-          /*if(r.getY() == 0){
-            while(current.getArrowHeight() > 0){
+          //once at the top make go transparent, print new rect to give effect
+          if(r.getY() < 0){
+            r.setHeight(0);
+            float newHeight = r.getY() + current.getRectHeight();
+            //draw partial rectangles at top of patch
+            if(newHeight>0){
+              stroke(r.getStrokeColor());
+              fill(r.getColor());
+              rect(r.getX(), 0, r.getWidth(), newHeight );
+              //change rectangles heights individually to avoid jumps
+            } else {
+              //wrap around to bottome of the patch
+                if(i!=0){
+                  r.setPosition(r.getX(), bows.get(i-1).rectArray.get(j).getY() 
+                                                  + 2*current.getRectHeight());
+                }else{
+                  r.setPosition(r.getX(), bows.get(4).rectArray.get(j).getY() 
+                                                  + 2*current.getRectHeight());
+                }
             }
-          }*/
-            
+          }  
         }
         current.display();
-        
-        
-        /*
-         * When an arrow leaves a patch it gets sent to the back of the queue
-         *
-         */
-         
      }
      popMatrix();
   }
   
-  
-  // rolls
+ 
+  // moves arrows up to wrap around
   void update(){
     //give the arrows some velocity
     for(Element arrow: bows){
       //offset for x,y/ speedUp for vectors
       arrow.offSet(0,-0.2);
-      
-      
     }
   }
 }

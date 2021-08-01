@@ -19,11 +19,8 @@ class Element {
   //drag
   void move(){
   }
-  
-  
   float getX (){ return position.x; }
   float getY (){ return position.y; }
-  
   
   void display(){
     
@@ -44,8 +41,9 @@ class Element {
   void speedUp(PVector velocity, PVector acceleration){
     }
   
-
 }
+
+
 class PixelArrow extends Element {
   ArrayList<Rectangle> rectArray;
   float arrowWidth = width/8;
@@ -104,12 +102,53 @@ class PixelArrow extends Element {
   }
   //choose amount to shift element by
   void offSet(float x, float y) {
+    position.x += x;
+    position.y += y;
     for(Shape s: rectArray){
       s.offSet(x,y);
     }
   }
   
+  void place(float x, float y) {
+    super.place(x,y);
+    for(int i =0; i < rectArray.size(); i++){
+      if(i==0){
+       Rectangle current = rectArray.get(i);
+       current.setPosition(position.x,position.y);
+      }//builds rest offset to first
+      if(i==4){
+        Rectangle previous = rectArray.get(0);
+        Rectangle current = rectArray.get(i);
+        float previousX = previous.position.x;
+        float previousY = previous.position.y;
+        
+        current.setPosition(previousX+current.getWidth(), 
+                              previousY+rectHeight/2);
+      }
+    
+      if ( i < 4 && i!=0){
+        Rectangle previous = rectArray.get(i-1);
+        Rectangle current = rectArray.get(i);
+        float previousX = previous.position.x;
+        float previousY = previous.position.y;
+        
+        current.setPosition(previousX-current.getWidth(), 
+                              previousY+rectHeight/2);
+      } else if (i > 4) {
+        Rectangle previous = rectArray.get(i-1);
+        Rectangle current = rectArray.get(i);
+        float previousX = previous.position.x;
+        float previousY = previous.position.y;
+        
+        current.setPosition(previousX+current.getWidth(), 
+                              previousY+rectHeight/2);
+      }
+    }
+  }
   
+  //only changes element position but not shapes that make it up
+  void setPosition(float x, float y) { super.place(x,y);}
+  //Make element a specific color
   void chooseColor(color c){
     colors.add(c);
     for(Rectangle r: rectArray){
@@ -117,13 +156,10 @@ class PixelArrow extends Element {
       r.setStrokeColor(c);
     }
   }
-  
   /*
    * Pass in an array of colors, go through all shapes that make the
    * array and changes them to the same color, picks a random color from array
    */
-  
-  
   void setColor(ArrayList<Integer> c){
     super.setColor(c);
     int pickColor = (int)random(0,colors.size()-1);
@@ -134,13 +170,9 @@ class PixelArrow extends Element {
   }
   
   
-  float getRectHeight() {
-    return rectHeight;
-  }
+  float getRectHeight() { return rectHeight;}
   
-  float getRectY() {
-   return rectArray.get(0).getY(); 
-  }
+  float getRectY() { return rectArray.get(0).getY(); }
   
   
   float getArrowHeight(){
@@ -151,8 +183,6 @@ class PixelArrow extends Element {
    }
    return aHeight; 
   }
-  
-
   /*
    *  Elements position is in reference to the top left corner of 
    *  the patch they are located on.
