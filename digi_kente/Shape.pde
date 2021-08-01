@@ -32,6 +32,7 @@ class Shape {
     position.x += x;
     position.y += y;
   }
+  
   void rotateShape(float deg){
     pushMatrix();
     translate(this.center.x, this.center.y);

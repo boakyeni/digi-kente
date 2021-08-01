@@ -41,6 +41,9 @@ class Element {
     for(Shape s: shapeArray){s.offSet(x,y);}
   }
   
+  void speedUp(PVector velocity, PVector acceleration){
+    }
+  
 
 }
 class PixelArrow extends Element {
@@ -58,7 +61,7 @@ class PixelArrow extends Element {
     
     //Rectangles are in preorder
     for(int i = 0; i < 7; i++){
-      color c = color(255,0,0);
+      color c = color(120,0,0);
       rectArray.add(new Rectangle(loc.x, loc.y, rectWidth, rectHeight));
       rectArray.get(i).setColor(c);
       rectArray.get(i).setStrokeColor(c);
@@ -135,6 +138,10 @@ class PixelArrow extends Element {
     return rectHeight;
   }
   
+  float getRectY() {
+   return rectArray.get(0).getY(); 
+  }
+  
   
   float getArrowHeight(){
    float aHeight=0;
@@ -151,12 +158,12 @@ class PixelArrow extends Element {
    *  the patch they are located on.
    */
   void display(){
-    pushMatrix();
-    translate(boundary.xCord,boundary.yCord);
+    
+   // translate(boundary.xCord,boundary.yCord);
     for(Rectangle r: rectArray){
       r.display();
     }
-    popMatrix();
+    
   }
   
 }

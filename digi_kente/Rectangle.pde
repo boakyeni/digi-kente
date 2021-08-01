@@ -27,14 +27,14 @@ class Rectangle extends Shape {
   }
   
   void display(){
-    fill(shapeColor);
-    stroke(strokeColor);
-    if(rectHeight != 0){
+    if(this.rectHeight != 0){
+      fill(shapeColor);
       stroke(strokeColor);
       rect(position.x, position.y, rectWidth, rectHeight);
     }else{
       stroke(0, 0);
-      rect(position.x, position.y, rectWidth, rectHeight);
+      noFill();
+      rect(position.x, position.y, rectWidth, 0);
     }
   }
     
